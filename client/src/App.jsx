@@ -21,10 +21,10 @@ export default function App() {
         </div>
         {user && (
           <nav>
-            <NavLink to="/">首页</NavLink>
-            <NavLink to="/search">搜索</NavLink>
-            <NavLink to="/trade">交易</NavLink>
-            <NavLink to="/profile">我的</NavLink>
+            <NavLink to="/"><span className="nav-icon" aria-hidden="true">🏠</span>首页</NavLink>
+            <NavLink to="/search"><span className="nav-icon" aria-hidden="true">🔍</span>搜索</NavLink>
+            <NavLink to="/trade"><span className="nav-icon" aria-hidden="true">📦</span>交易</NavLink>
+            <NavLink to="/profile"><span className="nav-icon" aria-hidden="true">👤</span>我的</NavLink>
           </nav>
         )}
       </header>

@@ -4,6 +4,8 @@ import BookCard from "../components/BookCard.jsx";
 import { EmptyState, ErrorMessage, Loading } from "../components/StatusMessage.jsx";
 import { useAuth } from "../state/AuthContext.jsx";
 
+import { getTagColorClass } from "../utils/bookTheme.js";
+
 export default function ProfilePage() {
   const { user, logout, updateUser } = useAuth();
   const [profile, setProfile] = useState(null);
@@ -80,17 +82,24 @@ export default function ProfilePage() {
 
   return (
     <main className="two-columns">
-      <section className="panel">
-        <h1>个人中心</h1>
+      <section className="panel panel-profile">
+        <div className="profile-hero">
+          <div className="profile-avatar">{(profile?.nickname || user.nickname || "同").slice(0, 1)}</div>
+          <div>
+            <h1>{profile?.nickname || user.nickname}</h1>
+            <p className="muted">{profile?.major} · {profile?.grade} · {profile?.campus}</p>
+          </div>
+          <div className="credit-badge">
+            <strong>{avgRating.toFixed(1)}</strong>
+            <span>信用分</span>
+          </div>
+        </div>
         <ErrorMessage error={error} />
         {success && <div className="success-box">{success}</div>}
-        <p><strong>{profile?.nickname || user.nickname}</strong></p>
-        <p className="muted">{profile?.major} · {profile?.grade} · {profile?.campus}</p>
-        <p className="score">信用评分：{avgRating.toFixed(1)} / 5</p>
         <h3>用户画像</h3>
         <div className="tags">
-          {[...(profile?.courses || []), ...(profile?.interests || [])].map((tag) => (
-            <span key={tag}>{tag}</span>
+          {[...(profile?.courses || []), ...(profile?.interests || [])].map((tag, index) => (
+            <span key={tag} className={getTagColorClass(tag, index)}>{tag}</span>
           ))}
         </div>
 
@@ -131,7 +140,7 @@ export default function ProfilePage() {
         <h3>收到的评价</h3>
         <div className="list">
           {reviews.map((review) => (
-            <div className="list-item" key={review._id}>
+            <div className="list-item review-item" key={review._id}>
               <strong>{review.rating} 分 · {review.reviewer?.nickname}</strong>
               <span>{review.content || "对方没有填写文字评价"}</span>
             </div>

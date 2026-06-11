@@ -10,7 +10,7 @@ export default function OrderCard({ order, currentUserId, onConfirm, onComplete,
   const isSeller = String(order.seller?._id || order.seller) === String(currentUserId);
 
   return (
-    <div className="list-item">
+    <div className={`list-item order-item order-${order.status}`}>
       <div className="card-title">
         <strong>{order.book?.title || "书籍已删除"}</strong>
         <span className={`badge ${order.status}`}>{statusText[order.status] || order.status}</span>

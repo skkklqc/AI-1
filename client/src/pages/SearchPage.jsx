@@ -15,16 +15,19 @@ export default function SearchPage() {
   const [searched, setSearched] = useState(false);
   const [error, setError] = useState("");
 
-  async function search(event, page = 1) {
+  async function search(event, page = 1, keywordOverride) {
     event?.preventDefault();
     setError("");
     setLoading(true);
     setSearched(true);
 
+    const activeKeyword = keywordOverride ?? keyword;
+
     try {
-      const { data } = await http.get("/books/search", { params: { keyword, course, category, page } });
+      const { data } = await http.get("/books/search", { params: { keyword: activeKeyword, course, category, page } });
       setBooks(data.items || []);
       setMeta({ total: data.total, page: data.page, pageSize: data.pageSize });
+      if (keywordOverride !== undefined) setKeyword(keywordOverride);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -49,14 +52,26 @@ export default function SearchPage() {
 
   return (
     <main>
-      <section className="panel">
-        <h1>关键词检索</h1>
-        <p className="muted">支持书名、作者、标签、描述和课程名模糊匹配。</p>
+      <section className="panel panel-search">
+        <div className="panel-head">
+          <div className="panel-icon panel-icon-search">🔍</div>
+          <div>
+            <h1>关键词检索</h1>
+            <p className="muted">支持书名、作者、标签、描述和课程名模糊匹配。</p>
+          </div>
+        </div>
+        <div className="quick-chips">
+          {["高数", "408", "数据结构", "四六级", "Java"].map((item) => (
+            <button key={item} type="button" className="ghost quick-chip" onClick={() => search(null, 1, item)}>
+              {item}
+            </button>
+          ))}
+        </div>
         <form className="search-bar" onSubmit={search}>
           <input value={keyword} onChange={(e) => setKeyword(e.target.value)} placeholder="输入书名 / 标签 / 关键词" />
           <input value={course} onChange={(e) => setCourse(e.target.value)} placeholder="课程名，例如 数据结构" />
           <input value={category} onChange={(e) => setCategory(e.target.value)} placeholder="分类，例如 教材" />
-          <button>搜索</button>
+          <button className="accent">搜索</button>
         </form>
       </section>
 
