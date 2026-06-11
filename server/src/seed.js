@@ -7,6 +7,28 @@ import { Order } from "./models/Order.js";
 import { Review } from "./models/Review.js";
 import { generateBookTags } from "./utils/tags.js";
 
+const sellerContacts = [
+  ["微信 cyx_cqu27", "手机 13800000001", "QQ 2836174905"],
+  ["微信 wangsy_cqu", "手机 13800000002", "QQ 2847610593"],
+  ["微信 zyx2021_cqu", "手机 13800000003", "QQ 2958471036"],
+  ["微信 lihr_dev", "手机 13800000004", "QQ 1572983640"],
+  ["微信 zyl_cqu", "手机 13800000005", "QQ 3027485619"],
+  ["微信 zzh_math", "手机 13800000006", "QQ 3128456790"]
+];
+
+function assignSellerContacts(books, users) {
+  const ownerIndex = new Map(users.map((user, index) => [String(user._id), index]));
+  const usage = new Array(users.length).fill(0);
+
+  return books.map((book) => {
+    const index = ownerIndex.get(String(book.owner)) ?? 0;
+    const pool = sellerContacts[index];
+    const contactMethod = pool[usage[index] % pool.length];
+    usage[index] += 1;
+    return { ...book, contactMethod };
+  });
+}
+
 async function seed() {
   await connectDB();
   await Promise.all([User.deleteMany({}), Book.deleteMany({}), Order.deleteMany({}), Review.deleteMany({})]);
@@ -14,7 +36,7 @@ async function seed() {
   const passwordHash = await bcrypt.hash("123456", 10);
   const users = await User.insertMany([
     {
-      nickname: "小李",
+      nickname: "陈宇轩",
       phone: "13800000001",
       passwordHash,
       major: "计算机科学与技术",
@@ -25,7 +47,7 @@ async function seed() {
       behavior: { searchedKeywords: ["数据结构", "考研"] }
     },
     {
-      nickname: "小王",
+      nickname: "王思远",
       phone: "13800000002",
       passwordHash,
       major: "经济学",
@@ -35,7 +57,7 @@ async function seed() {
       interests: ["经管", "数学"]
     },
     {
-      nickname: "小陈",
+      nickname: "张雨欣",
       phone: "13800000003",
       passwordHash,
       major: "英语",
@@ -45,7 +67,7 @@ async function seed() {
       interests: ["四六级", "真题", "备考"]
     },
     {
-      nickname: "小赵",
+      nickname: "李浩然",
       phone: "13800000004",
       passwordHash,
       major: "软件工程",
@@ -55,7 +77,7 @@ async function seed() {
       interests: ["后端开发", "编程", "实习"]
     },
     {
-      nickname: "小周",
+      nickname: "赵悦琳",
       phone: "13800000005",
       passwordHash,
       major: "会计学",
@@ -65,7 +87,7 @@ async function seed() {
       interests: ["经管", "考证"]
     },
     {
-      nickname: "小林",
+      nickname: "周子涵",
       phone: "13800000006",
       passwordHash,
       major: "自动化",
@@ -684,7 +706,12 @@ async function seed() {
     }
   );
 
-  const books = await Book.insertMany(rawBooks.map((book) => ({ ...book, tags: generateBookTags(book) })));
+  const books = await Book.insertMany(
+    assignSellerContacts(
+      rawBooks.map((book) => ({ ...book, tags: generateBookTags(book) })),
+      users
+    )
+  );
 
   users[0].behavior = {
     ...(users[0].behavior || {}),

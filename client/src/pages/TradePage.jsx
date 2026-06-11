@@ -5,9 +5,11 @@ import OrderCard from "../components/OrderCard.jsx";
 import ReviewForm from "../components/ReviewForm.jsx";
 import { EmptyState, ErrorMessage } from "../components/StatusMessage.jsx";
 import { useAuth } from "../state/AuthContext.jsx";
+import { useOverlay } from "../state/OverlayContext.jsx";
 
 export default function TradePage() {
   const { user } = useAuth();
+  const { showToast, showAlert, showPrompt } = useOverlay();
   const [book, setBook] = useState(emptyBookForm);
   const [orders, setOrders] = useState([]);
   const [reviewOrder, setReviewOrder] = useState(null);
@@ -31,7 +33,7 @@ export default function TradePage() {
       setSubmitting(true);
       await http.post("/books", { ...book, price: Number(book.price), originalPrice: Number(book.originalPrice) });
       setBook(emptyBookForm);
-      alert("书籍已上架，系统已自动生成关键词标签");
+      showToast("书籍已上架，系统已自动生成关键词标签");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -49,12 +51,17 @@ export default function TradePage() {
       await http.patch(`/orders/${orderId}/complete`);
       await loadOrders();
     } catch (err) {
-      alert(err.message);
+      await showAlert({ title: "操作失败", message: err.message, tone: "error" });
     }
   }
 
   async function cancel(orderId) {
-    const reason = window.prompt("请输入取消原因", "计划有变");
+    const reason = await showPrompt({
+      title: "取消订单",
+      message: "请填写取消原因，方便对方了解情况。",
+      defaultValue: "计划有变",
+      placeholder: "例如：计划有变、已买到其他书"
+    });
     if (reason === null) return;
     await http.patch(`/orders/${orderId}/cancel`, { reason });
     await loadOrders();
@@ -64,9 +71,9 @@ export default function TradePage() {
     try {
       await http.post("/reviews", payload);
       setReviewOrder(null);
-      alert("评价已提交");
+      showToast("评价已提交");
     } catch (err) {
-      alert(err.message);
+      await showAlert({ title: "评价失败", message: err.message, tone: "error" });
     }
   }
 

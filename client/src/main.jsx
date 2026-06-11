@@ -3,13 +3,16 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
 import { AuthProvider } from "./state/AuthContext.jsx";
+import { OverlayProvider } from "./state/OverlayContext.jsx";
 import "./styles.css";
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <App />
+        <OverlayProvider>
+          <App />
+        </OverlayProvider>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>

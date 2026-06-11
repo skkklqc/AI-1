@@ -539,6 +539,258 @@ label span {
   width: 100%;
 }
 
+.overlay-backdrop {
+  align-items: center;
+  animation: overlay-fade-in 0.22s ease;
+  backdrop-filter: blur(8px);
+  background: rgba(15, 23, 42, 0.48);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 24px;
+  position: fixed;
+  z-index: 1000;
+}
+
+.overlay-backdrop-sheet {
+  align-items: flex-end;
+}
+
+@keyframes overlay-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sheet-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes toast-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.toast-stack {
+  display: grid;
+  gap: 10px;
+  left: 50%;
+  pointer-events: none;
+  position: fixed;
+  top: 20px;
+  transform: translateX(-50%);
+  width: min(420px, calc(100vw - 32px));
+  z-index: 1100;
+}
+
+.app-toast {
+  align-items: center;
+  animation: toast-drop 0.24s ease;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(214, 228, 255, 0.95);
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
+  color: #1d2939;
+  display: flex;
+  font-weight: 600;
+  gap: 12px;
+  padding: 14px 16px;
+}
+
+.app-toast-icon {
+  align-items: center;
+  border-radius: 50%;
+  display: inline-flex;
+  flex: 0 0 28px;
+  font-size: 14px;
+  font-weight: 800;
+  height: 28px;
+  justify-content: center;
+  width: 28px;
+}
+
+.app-toast-success .app-toast-icon {
+  background: #ecfdf3;
+  color: #027a48;
+}
+
+.app-toast-error .app-toast-icon {
+  background: #fef3f2;
+  color: #b42318;
+}
+
+.app-toast-info .app-toast-icon {
+  background: #eff8ff;
+  color: #175cd3;
+}
+
+.app-dialog {
+  animation: sheet-slide-up 0.24s ease;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid rgba(214, 228, 255, 0.95);
+  border-radius: 24px;
+  box-shadow: 0 28px 60px rgba(15, 23, 42, 0.22);
+  max-width: 420px;
+  padding: 28px 24px 22px;
+  text-align: center;
+  width: 100%;
+}
+
+.app-dialog h3 {
+  font-size: 20px;
+  margin: 14px 0 8px;
+}
+
+.app-dialog-message {
+  color: #475467;
+  line-height: 1.65;
+  margin: 0 0 18px;
+  white-space: pre-line;
+}
+
+.app-dialog input {
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.app-dialog-icon {
+  align-items: center;
+  border-radius: 50%;
+  display: inline-flex;
+  font-size: 22px;
+  font-weight: 800;
+  height: 56px;
+  justify-content: center;
+  margin: 0 auto;
+  width: 56px;
+}
+
+.app-dialog-icon-success {
+  background: #ecfdf3;
+  color: #027a48;
+}
+
+.app-dialog-icon-info {
+  background: #eff8ff;
+  color: #175cd3;
+}
+
+.app-dialog-icon-warning {
+  background: #fffaeb;
+  color: #b54708;
+}
+
+.app-dialog-icon-error {
+  background: #fef3f2;
+  color: #b42318;
+}
+
+.app-dialog-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.app-dialog-actions button {
+  min-width: 108px;
+}
+
+.book-detail-sheet {
+  animation: sheet-slide-up 0.28s ease;
+  background: #fff;
+  border-radius: 28px 28px 0 0;
+  box-shadow: 0 -12px 40px rgba(15, 23, 42, 0.18);
+  max-height: min(88vh, 760px);
+  max-width: 560px;
+  overflow: auto;
+  position: relative;
+  width: 100%;
+}
+
+.book-detail-image {
+  border-radius: 28px 28px 0 0;
+  height: 220px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.book-detail-body {
+  padding: 20px 22px 28px;
+}
+
+.book-detail-head {
+  align-items: start;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.book-detail-head h2 {
+  font-size: 22px;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.book-detail-meta {
+  background: #f8fbff;
+  border: 1px solid #d6e4ff;
+  border-radius: 18px;
+  display: grid;
+  gap: 14px;
+  margin: 18px 0 22px;
+  padding: 16px;
+}
+
+.book-detail-meta div {
+  display: grid;
+  gap: 4px;
+}
+
+.meta-label {
+  color: #667085;
+  font-size: 13px;
+}
+
+.sheet-close {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 50%;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+  display: inline-flex;
+  font-size: 24px;
+  height: 38px;
+  justify-content: center;
+  line-height: 1;
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  width: 38px;
+  z-index: 1;
+}
+
+.sheet-primary {
+  width: 100%;
+}
+
 @media (max-width: 760px) {
   .topbar,
   .hero {

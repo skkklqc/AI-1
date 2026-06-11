@@ -6,7 +6,7 @@ export default function LoginPage() {
   const { login, register } = useAuth();
   const [isRegister, setIsRegister] = useState(false);
   const [form, setForm] = useState({
-    nickname: "小李",
+    nickname: "陈宇轩",
     phone: "13800000001",
     password: "123456",
     major: "计算机科学与技术",
@@ -73,7 +73,7 @@ export default function LoginPage() {
           <button className={isRegister ? "tab-active" : "ghost"} onClick={() => setIsRegister(true)}>注册</button>
         </div>
         <h2>{isRegister ? "手机号注册" : "手机号登录"}</h2>
-        <p className="muted">测试账号：13800000001 / 123456。新用户可直接用自己的手机号注册。</p>
+        <p className="muted">测试账号：陈宇轩 · 13800000001 / 123456。新用户可直接用自己的手机号注册。</p>
         <ErrorMessage error={error} />
         <form onSubmit={submit} className="form-grid">
           {isRegister && <input value={form.nickname} onChange={(e) => update("nickname", e.target.value)} placeholder="昵称（可选）" />}

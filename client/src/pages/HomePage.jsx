@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { http } from "../api/http";
 import BookCard from "../components/BookCard.jsx";
 import { EmptyState, ErrorMessage, Loading } from "../components/StatusMessage.jsx";
+import { useOverlay } from "../state/OverlayContext.jsx";
 
 export default function HomePage() {
+  const { showToast, showAlert, showBookDetail } = useOverlay();
   const [books, setBooks] = useState([]);
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,17 +24,17 @@ export default function HomePage() {
   async function buy(bookId) {
     try {
       await http.post("/orders", { bookId });
-      alert("订单已创建，请到交易页查看");
+      showToast("订单已创建，请到交易页查看");
       setBooks((prev) => prev.filter((book) => book._id !== bookId));
       setRecommendations((prev) => prev.filter(({ book }) => book._id !== bookId));
     } catch (err) {
-      alert(err.message);
+      await showAlert({ title: "下单失败", message: err.message, tone: "error" });
     }
   }
 
   async function view(bookId) {
     const { data } = await http.get(`/books/${bookId}`);
-    alert(`《${data.title}》\n课程：${data.courseName}\n联系方式：${data.contactMethod || "未填写"}\n备注：${data.tradeNote || "无"}`);
+    showBookDetail(data);
   }
 
   return (
